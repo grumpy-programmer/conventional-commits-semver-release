@@ -1,0 +1,39 @@
+name: 'Conventional commits semver release'
+description: 'GitHub Action for semantic versioning releases using conventional commits'
+author: 'Grumpy Programmer'
+branding:
+  icon: activity
+  color: purple
+inputs:
+  init-version:
+    description: 'The init version of project default: 0.0.0'
+    required: false
+    default: '0.0.0'
+  tag-prefix:
+    description: 'The prefix of version tag, default: v'
+    required: false
+    default: 'v'
+  assets:
+    description: 'Assets files added to release, accept multiple paths, example: path/to/file.txt path/to/*.txt path/**/*.txt'
+    required: false
+    default: ''
+outputs:
+  tag:
+    description: 'Tag as tag-prefix + version, example: v1.2.3'
+  version:
+    description: 'New version or current version if not released, example: 1.2.3'
+  version-major:
+    description: 'Major part of version, example: 1'
+  version-minor:
+    description: 'Minor part of version, example: 2'
+  version-patch:
+    description: 'Patch part of version, example: 3'
+  tag-prefix:
+    description: 'Tag prefix same as input'
+  released:
+    description: 'True if new version was released'
+runs:
+  using: 'node16'
+  main: 'dist/main/index.js'
+  post: 'dist/post/index.js'
+  post-if: 'success()'
