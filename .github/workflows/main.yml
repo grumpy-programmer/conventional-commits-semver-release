@@ -1,4 +1,4 @@
-name: branch
+name: main
 on:
   push:
     branches:
@@ -24,8 +24,7 @@ jobs:
 
       - name: semver
         id: semver
-#        uses: ./
-        uses: grumpy-programmer/actions-semver-release@v1 # TODO: remove this temporary usage of old actions-semver-release
+        uses: ./
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
