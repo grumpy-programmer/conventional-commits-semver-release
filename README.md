@@ -1,4 +1,4 @@
-# conventional-commits-semver-release
+# Conventional commits semver release [![main](https://github.com/grumpy-programmer/conventional-commits-semver-release/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/grumpy-programmer/conventional-commits-semver-release/actions/workflows/main.yml)
 GitHub Action for semantic versioning releases using conventional commits
 
 GitHub action using [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/)
