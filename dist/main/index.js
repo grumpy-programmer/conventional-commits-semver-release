@@ -14761,10 +14761,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const github_1 = __nccwpck_require__(978);
 const version_1 = __nccwpck_require__(1946);
-const EXCLAMATION_MARK_BRAKING_CHANGE_REGEX = new RegExp(/^.+!: /);
-const BRAKING_CHANGE_REGEX = new RegExp(/.*BREAKING CHANGE.*/);
-const FIX_REGEX = new RegExp(/^fix(|\(.+\)): /);
-const FEATURE_REGEX = new RegExp(/^feat(|\(.+\)): /);
+const MAJOR_REGEX = new RegExp('^(\\w+!: |\\w+\\(.+\\)!: )|BREAKING CHANGE');
+const MINOR_REGEX = new RegExp('^(feat: |feat\\(.+\\): )');
+const PATCH_REGEX = new RegExp('^(fix: |fix\\(.+\\): |chore\\(deps.*\\): )');
 const github = github_1.GithubService.create();
 function main() {
     var _a, _b;
@@ -14865,13 +14864,13 @@ function increaseVersionByMessages(version, messages) {
     return version;
 }
 function breakingChangeTest(message) {
-    return EXCLAMATION_MARK_BRAKING_CHANGE_REGEX.test(message) || BRAKING_CHANGE_REGEX.test(message);
+    return MAJOR_REGEX.test(message);
 }
 function featureTest(message) {
-    return FEATURE_REGEX.test(message);
+    return PATCH_REGEX.test(message);
 }
 function fixTest(message) {
-    return FIX_REGEX.test(message);
+    return MINOR_REGEX.test(message);
 }
 main()
     .catch(e => core.error(e));
