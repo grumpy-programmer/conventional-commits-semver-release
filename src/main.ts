@@ -85,7 +85,9 @@ async function main() {
 }
 
 function getLatestRelease(releases: Release[], prefix: string): Release | undefined {
-  return releases.filter(release => release.tag_name.startsWith(prefix))
+  const regex = new RegExp(`^${prefix}\\d+\\.\\d+\\.\\d+$`);
+
+  return releases.filter(release => release.tag_name.match(regex) !== null)
     .sort((a, b) => Date.parse(a.created_at) - Date.parse(b.created_at))
     .pop();
 }
