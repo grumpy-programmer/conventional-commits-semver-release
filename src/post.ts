@@ -11,12 +11,12 @@ async function main() {
   const tag = getState('tag');
   const version = getState('version');
   const released = getParsedState<boolean>('released');
-  const messages = getParsedState<string[]>('messages');
+  const changelog = getParsedState<string[]>('changelog');
 
   if (released) {
     core.info(`release: creating for version: ${version}, tag: ${tag}`);
 
-    const release = await createRelease(tag, messages);
+    const release = await createRelease(tag, changelog);
 
     core.info(`release: created id: ${release.id}`);
 
@@ -48,9 +48,9 @@ function getState(key: string): string {
   return state;
 }
 
-async function createRelease(tag: string, messages: string[]) {
-  const changelog = messages.map(m => `* ${m}\n`).join('');
-  const body = `**Changelog:**\n${changelog}`;
+async function createRelease(tag: string, changelog: string[]) {
+  const changes = changelog.map(m => `* ${m}\n`).join('');
+  const body = `**Changelog:**\n${changes}`;
 
   return github.createRelease(tag, body);
 }
