@@ -4,7 +4,7 @@ import { Version } from './version';
 
 const MAJOR_REGEX = new RegExp('^(\\w+!: |\\w+\\(.+\\)!: )|BREAKING CHANGE');
 const MINOR_REGEX = new RegExp('^(feat: |feat\\(.+\\): )');
-const PATCH_REGEX = new RegExp('^(fix: |fix\\(.+\\): |chore\\(deps.*\\): )');
+const PATCH_REGEX = new RegExp('^(fix: |fix\\(.+\\): |chore\\(deps\\): )');
 
 const github = GithubService.create();
 
