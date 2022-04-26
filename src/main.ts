@@ -10,7 +10,7 @@ const FEATURE_REGEX = new RegExp(/^feat(|\(.+\)): /);
 const github = GithubService.create();
 
 async function main() {
-  const initVersion = core.getInput('init-version') || '0.0.0';
+  const initVersion = core.getInput('init-version') || '0.1.0';
   const tagPrefix = core.getInput('tag-prefix') || 'v';
 
   core.debug(`main: input initVersion: ${initVersion}`);
@@ -121,6 +121,10 @@ function createChangelog(messages: string[]): string[] {
 }
 
 function increaseVersionByMessages(version: Version, messages: string[]): Version {
+  if (version.isIncreased()) {
+    return version;
+  }
+
   if (messages.findIndex(breakingChangeTest) >= 0) {
     return version.increaseMajor();
   }

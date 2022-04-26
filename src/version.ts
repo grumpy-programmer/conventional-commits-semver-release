@@ -9,9 +9,9 @@ export class Version {
     this.increased = increased;
   }
 
-  public static parse(version?: string, initVersion: string = '0.0.0', prefix: string = 'v') {
+  public static parse(version?: string, initVersion: string = '0.1.0', prefix: string = 'v') {
     if (version === undefined) {
-      return new Version(new SemVer(initVersion));
+      return new Version(new SemVer(initVersion), true);
     }
 
     const versionWithoutPrefix = version.replace(prefix, '');
@@ -57,6 +57,11 @@ export class Version {
   }
 
   private increase(type: 'major' | 'minor' | 'patch'): Version {
+    // prevent double version increase
+    if (this.increased) {
+      return this;
+    }
+
     const version = new SemVer(this.version.raw);
     version.inc(type);
 

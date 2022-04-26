@@ -6,9 +6,9 @@ branding:
   color: purple
 inputs:
   init-version:
-    description: 'The init version of project default: 0.0.0'
+    description: 'The init version of project default: 0.1.0'
     required: false
-    default: '0.0.0'
+    default: '0.1.0'
   tag-prefix:
     description: 'The prefix of version tag, default: v'
     required: false
