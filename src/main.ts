@@ -2,10 +2,9 @@ import * as core from '@actions/core';
 import { Commit, GithubService, Release } from './github';
 import { Version } from './version';
 
-const EXCLAMATION_MARK_BRAKING_CHANGE_REGEX = new RegExp(/^.+!: /);
-const BRAKING_CHANGE_REGEX = new RegExp(/.*BREAKING CHANGE.*/);
-const FIX_REGEX = new RegExp(/^fix(|\(.+\)): /);
-const FEATURE_REGEX = new RegExp(/^feat(|\(.+\)): /);
+const MAJOR_REGEX = new RegExp('^(\\w+!: |\\w+\\(.+\\)!: )|BREAKING CHANGE');
+const MINOR_REGEX = new RegExp('^(feat: |feat\\(.+\\): )');
+const PATCH_REGEX = new RegExp('^(fix: |fix\\(.+\\): |chore\\(deps.*\\): )');
 
 const github = GithubService.create();
 
@@ -137,15 +136,15 @@ function increaseVersionByMessages(version: Version, messages: string[]): Versio
 }
 
 function breakingChangeTest(message: string): boolean {
-  return EXCLAMATION_MARK_BRAKING_CHANGE_REGEX.test(message) || BRAKING_CHANGE_REGEX.test(message);
+  return MAJOR_REGEX.test(message);
 }
 
 function featureTest(message: string): boolean {
-  return FEATURE_REGEX.test(message);
+  return PATCH_REGEX.test(message);
 }
 
 function fixTest(message: string): boolean {
-  return FIX_REGEX.test(message);
+  return MINOR_REGEX.test(message);
 }
 
 main()
