@@ -15054,7 +15054,7 @@ const github_1 = __nccwpck_require__(978);
 const version_1 = __nccwpck_require__(1946);
 const MAJOR_REGEX = new RegExp('^(\\w+!: |\\w+\\(.+\\)!: )|BREAKING CHANGE');
 const MINOR_REGEX = new RegExp('^(feat: |feat\\(.+\\): )');
-const PATCH_REGEX = new RegExp('^(fix: |fix\\(.+\\): |chore\\(deps.*\\): )');
+const PATCH_REGEX = new RegExp('^(fix: |fix\\(.+\\): |chore\\(deps\\): )');
 const github = github_1.GithubService.create();
 function main() {
     var _a, _b;
