@@ -236,7 +236,7 @@ successful completion of all steps and detection of a new version (`post`).
 
 | input        | type             | default | description                                                             |
 |--------------|------------------|---------|-------------------------------------------------------------------------|
-| init-version | string           | 0.0.0   | initial version of the project                                          |
+| init-version | string           | 0.1.0   | initial version of the project                                          |
 | tag-prefix   | string           | v       | tag prefix, useful for versioning multiple components in one repository |
 | assets       | multiline string |         | list of files to be upload as assets                                    |
 
