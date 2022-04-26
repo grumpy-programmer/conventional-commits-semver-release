@@ -14867,10 +14867,10 @@ function breakingChangeTest(message) {
     return MAJOR_REGEX.test(message);
 }
 function featureTest(message) {
-    return PATCH_REGEX.test(message);
+    return MINOR_REGEX.test(message);
 }
 function fixTest(message) {
-    return MINOR_REGEX.test(message);
+    return PATCH_REGEX.test(message);
 }
 main()
     .catch(e => core.error(e));
