@@ -9,8 +9,6 @@
     "build:post": "ncc build src/post.ts -o dist/post",
     "prebuild": "rm -rf dist",
     "build": "npm-run-all -p build:main build:post",
-    "watch": "ncc build --watch",
-    "start": "node dist/index.js",
     "upgrade": "ncu -u"
   },
   "dependencies": {

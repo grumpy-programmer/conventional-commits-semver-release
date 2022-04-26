@@ -57,6 +57,7 @@ async function main() {
   const versionMinor = newVersion.getMinor();
   const versionPatch = newVersion.getPatch();
   const released = newVersion.isIncreased();
+  const changelog = createChangelog(messages);
 
   core.debug(`main: computed tag: ${tag}, version: ${version}, released: ${released}`);
 
@@ -79,9 +80,9 @@ async function main() {
   core.saveState('tag', tag);
   core.saveState('version', version);
   core.saveState('released', released);
-  core.saveState('messages', messages);
+  core.saveState('changelog', changelog);
 
-  core.debug(`main: state set tag: ${tag}, version: ${version}, released: ${released}, message count: ${messages.length}`);
+  core.debug(`main: state set tag: ${tag}, version: ${version}, released: ${released}, changelog count: ${changelog.length}`);
 }
 
 function getLatestRelease(releases: Release[], prefix: string): Release | undefined {
@@ -113,6 +114,10 @@ function extractMessages(commits: Commit[]): string[] {
     .map(commit => commit.commit.message)
     .map(m => m.replace(/\r/g, ''))
     .map(m => m.replace(/\n\n/g, '\n'));
+}
+
+function createChangelog(messages: string[]): string[] {
+  return messages.map(message => message.split('\n')[ 0 ]);
 }
 
 function increaseVersionByMessages(version: Version, messages: string[]): Version {
