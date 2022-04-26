@@ -14769,7 +14769,7 @@ const github = github_1.GithubService.create();
 function main() {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
-        const initVersion = core.getInput('init-version') || '0.0.0';
+        const initVersion = core.getInput('init-version') || '0.1.0';
         const tagPrefix = core.getInput('tag-prefix') || 'v';
         core.debug(`main: input initVersion: ${initVersion}`);
         core.debug(`main: input tagPrefix: ${tagPrefix}`);
@@ -14850,6 +14850,9 @@ function createChangelog(messages) {
     return messages.map(message => message.split('\n')[0]);
 }
 function increaseVersionByMessages(version, messages) {
+    if (version.isIncreased()) {
+        return version;
+    }
     if (messages.findIndex(breakingChangeTest) >= 0) {
         return version.increaseMajor();
     }
@@ -14889,9 +14892,9 @@ class Version {
         this.version = version;
         this.increased = increased;
     }
-    static parse(version, initVersion = '0.0.0', prefix = 'v') {
+    static parse(version, initVersion = '0.1.0', prefix = 'v') {
         if (version === undefined) {
-            return new Version(new semver_1.SemVer(initVersion));
+            return new Version(new semver_1.SemVer(initVersion), true);
         }
         const versionWithoutPrefix = version.replace(prefix, '');
         return new Version(new semver_1.SemVer(versionWithoutPrefix));
@@ -14925,6 +14928,10 @@ class Version {
         return `${prefix}${version}`;
     }
     increase(type) {
+        // prevent double version increase
+        if (this.increased) {
+            return this;
+        }
         const version = new semver_1.SemVer(this.version.raw);
         version.inc(type);
         return new Version(version, true);
