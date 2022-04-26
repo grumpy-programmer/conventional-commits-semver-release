@@ -144,11 +144,11 @@ function breakingChangeTest(message: string): boolean {
 }
 
 function featureTest(message: string): boolean {
-  return PATCH_REGEX.test(message);
+  return MINOR_REGEX.test(message);
 }
 
 function fixTest(message: string): boolean {
-  return MINOR_REGEX.test(message);
+  return PATCH_REGEX.test(message);
 }
 
 main()
