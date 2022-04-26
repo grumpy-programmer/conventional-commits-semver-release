@@ -14970,10 +14970,10 @@ function main() {
         const tag = getState('tag');
         const version = getState('version');
         const released = getParsedState('released');
-        const messages = getParsedState('messages');
+        const changelog = getParsedState('changelog');
         if (released) {
             core.info(`release: creating for version: ${version}, tag: ${tag}`);
-            const release = yield createRelease(tag, messages);
+            const release = yield createRelease(tag, changelog);
             core.info(`release: created id: ${release.id}`);
             if (assetPatterns.length > 0) {
                 const assetFiles = findFiles(assetPatterns);
@@ -14996,10 +14996,10 @@ function getState(key) {
     core.debug(`state: ${key} = ${state}`);
     return state;
 }
-function createRelease(tag, messages) {
+function createRelease(tag, changelog) {
     return __awaiter(this, void 0, void 0, function* () {
-        const changelog = messages.map(m => `* ${m}\n`).join('');
-        const body = `**Changelog:**\n${changelog}`;
+        const changes = changelog.map(m => `* ${m}\n`).join('');
+        const body = `**Changelog:**\n${changes}`;
         return github.createRelease(tag, body);
     });
 }
