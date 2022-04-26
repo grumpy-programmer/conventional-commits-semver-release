@@ -22,14 +22,6 @@ jobs:
           node-version: 16
           cache: yarn
 
-      - name: semver
-        id: semver
-        uses: ./
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          init-version: 1.0.0
-
       - name: get dependencies
         run: yarn
 
@@ -38,6 +30,14 @@ jobs:
 
       - name: show changes
         run: git status
+
+      - name: semver
+        id: semver
+        uses: ./
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          init-version: 1.0.0
 
       - name: commit and push change
         if: ${{ steps.semver.outputs.released == 'true' }}
