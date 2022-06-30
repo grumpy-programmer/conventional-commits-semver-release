@@ -5063,7 +5063,7 @@ function ownProp (obj, field) {
 var fs = __nccwpck_require__(7147)
 var path = __nccwpck_require__(1017)
 var minimatch = __nccwpck_require__(3973)
-var isAbsolute = __nccwpck_require__(8714)
+var isAbsolute = (__nccwpck_require__(1017).isAbsolute)
 var Minimatch = minimatch.Minimatch
 
 function alphasort (a, b) {
@@ -5138,7 +5138,7 @@ function setopts (self, pattern, options) {
   self.changedCwd = false
   var cwd = process.cwd()
   if (!ownProp(options, "cwd"))
-    self.cwd = cwd
+    self.cwd = path.resolve(cwd)
   else {
     self.cwd = path.resolve(options.cwd)
     self.changedCwd = self.cwd !== cwd
@@ -5146,15 +5146,17 @@ function setopts (self, pattern, options) {
 
   self.root = options.root || path.resolve(self.cwd, "/")
   self.root = path.resolve(self.root)
-  if (process.platform === "win32")
-    self.root = self.root.replace(/\\/g, "/")
 
   // TODO: is an absolute `cwd` supposed to be resolved against `root`?
   // e.g. { cwd: '/test', root: __dirname } === path.join(__dirname, '/test')
   self.cwdAbs = isAbsolute(self.cwd) ? self.cwd : makeAbs(self, self.cwd)
-  if (process.platform === "win32")
-    self.cwdAbs = self.cwdAbs.replace(/\\/g, "/")
   self.nomount = !!options.nomount
+
+  if (process.platform === "win32") {
+    self.root = self.root.replace(/\\/g, "/")
+    self.cwd = self.cwd.replace(/\\/g, "/")
+    self.cwdAbs = self.cwdAbs.replace(/\\/g, "/")
+  }
 
   // disable comments and negation in Minimatch.
   // Note that they are not supported in Glob itself anyway.
@@ -5342,7 +5344,7 @@ var inherits = __nccwpck_require__(4124)
 var EE = (__nccwpck_require__(2361).EventEmitter)
 var path = __nccwpck_require__(1017)
 var assert = __nccwpck_require__(9491)
-var isAbsolute = __nccwpck_require__(8714)
+var isAbsolute = (__nccwpck_require__(1017).isAbsolute)
 var globSync = __nccwpck_require__(9010)
 var common = __nccwpck_require__(7625)
 var setopts = common.setopts
@@ -6100,7 +6102,7 @@ var Glob = (__nccwpck_require__(1957).Glob)
 var util = __nccwpck_require__(3837)
 var path = __nccwpck_require__(1017)
 var assert = __nccwpck_require__(9491)
-var isAbsolute = __nccwpck_require__(8714)
+var isAbsolute = (__nccwpck_require__(1017).isAbsolute)
 var common = __nccwpck_require__(7625)
 var setopts = common.setopts
 var ownProp = common.ownProp
@@ -6140,7 +6142,7 @@ function GlobSync (pattern, options) {
 }
 
 GlobSync.prototype._finish = function () {
-  assert(this instanceof GlobSync)
+  assert.ok(this instanceof GlobSync)
   if (this.realpath) {
     var self = this
     this.matches.forEach(function (matchset, index) {
@@ -6164,7 +6166,7 @@ GlobSync.prototype._finish = function () {
 
 
 GlobSync.prototype._process = function (pattern, index, inGlobStar) {
-  assert(this instanceof GlobSync)
+  assert.ok(this instanceof GlobSync)
 
   // Get the first [n] parts of pattern that are all strings.
   var n = 0
@@ -9877,6 +9879,11 @@ class Minimatch {
     this.options = options
     this.set = []
     this.pattern = pattern
+    this.windowsPathsNoEscape = !!options.windowsPathsNoEscape ||
+      options.allowWindowsEscape === false
+    if (this.windowsPathsNoEscape) {
+      this.pattern = this.pattern.replace(/\\/g, '/')
+    }
     this.regexp = null
     this.negate = false
     this.comment = false
@@ -12362,34 +12369,6 @@ function onceStrict (fn) {
   f.called = false
   return f
 }
-
-
-/***/ }),
-
-/***/ 8714:
-/***/ ((module) => {
-
-"use strict";
-
-
-function posix(path) {
-	return path.charAt(0) === '/';
-}
-
-function win32(path) {
-	// https://github.com/nodejs/node/blob/b3fcc245fb25539909ef1d5eaa01dbf92e168633/lib/path.js#L56
-	var splitDeviceRe = /^([a-zA-Z]:|[\\\/]{2}[^\\\/]+[\\\/]+[^\\\/]+)?([\\\/])?([\s\S]*?)$/;
-	var result = splitDeviceRe.exec(path);
-	var device = result[1] || '';
-	var isUnc = Boolean(device && device.charAt(1) !== ':');
-
-	// UNC paths are always absolute
-	return Boolean(result[2] || isUnc);
-}
-
-module.exports = process.platform === 'win32' ? win32 : posix;
-module.exports.posix = posix;
-module.exports.win32 = win32;
 
 
 /***/ }),
