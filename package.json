@@ -8,8 +8,7 @@
     "build:main": "ncc build src/main.ts -o dist/main",
     "build:post": "ncc build src/post.ts -o dist/post",
     "prebuild": "rm -rf dist",
-    "build": "npm-run-all -p build:main build:post",
-    "upgrade": "ncu -u"
+    "build": "npm-run-all -p build:main build:post"
   },
   "dependencies": {
     "@actions/core": "^1.9.0",
@@ -22,7 +21,6 @@
     "@types/node": "^18.0.0",
     "@types/semver": "^7.3.8",
     "@vercel/ncc": "^0.34.0",
-    "npm-check-updates": "^14.1.1",
     "npm-run-all": "^4.1.5",
     "typescript": "^4.6.4"
   }
